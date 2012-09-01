@@ -80,10 +80,7 @@ def __setRequestParams():
     if conf.data:
         if hasattr(conf.data, UNENCODED_ORIGINAL_VALUE):
             original = getattr(conf.data, UNENCODED_ORIGINAL_VALUE)
-            conf.data = type(conf.data)(conf.data.replace("\n", " "))
             setattr(conf.data, UNENCODED_ORIGINAL_VALUE, original)
-        else:
-            conf.data = conf.data.replace("\n", " ")
 
         place = PLACE.SOAP if re.match(SOAP_REGEX, conf.data, re.I | re.M) else PLACE.POST
 
@@ -160,7 +157,7 @@ def __setRequestParams():
             # Url encoding of the header values should be avoided
             # Reference: http://stackoverflow.com/questions/5085904/is-ok-to-urlencode-the-value-in-headerlocation-value
 
-            httpHeader = "-".join(_.capitalize() for _ in (httpHeader or "").split("-"))
+            httpHeader = httpHeader.title()
 
             if httpHeader == HTTPHEADER.USER_AGENT:
                 conf.parameters[PLACE.USER_AGENT] = urldecode(headerValue)
